@@ -63,7 +63,7 @@ class eodSurvey(experienceSampleNASATLX.EODvideoSurveyDialog):
     videoSurveyData = [[],[]]
 
     def getListOfVideos(self):
-        path = '/Users/awuzaso/Documents/wcmEthRecData'
+        path = '../wcmEthRecData'
         files = os.listdir(path)
 
         for f in os.listdir(path):
@@ -231,7 +231,7 @@ class surveyRequestDialog(experienceSampleNASATLX.surveyRequestWindow):
      def onClickYesButton(self,event):
 
 
-        filePath = "/Users/awuzaso/Documents/wcmEthRecData/activityTrack/"
+        filePath = "../wcmEthRecData/activityTrack/"
         file_exists = exists(filePath)
 
         if(file_exists == False):
@@ -275,7 +275,7 @@ class surveyRequestDialog(experienceSampleNASATLX.surveyRequestWindow):
      def onClickNoButton(self,event):
         print("No was clicked.")
 
-        filePath = "/Users/awuzaso/Documents/wcmEthRecData/activityTrack/"
+        filePath = "../wcmEthRecData/activityTrack/"
         file_exists = exists(filePath)
 
         if(file_exists == False):
@@ -350,7 +350,7 @@ class testFrame(experienceSampleNASATLX.wcmEthnographyApp):
     def onGoToRecordData(self,event):
         print("Go to record data button was clicked!")
         #https://stackoverflow.com/questions/71083145/how-to-open-a-finder-at-the-current-dir-on-mac-os-in-python
-        open_file("/Users/awuzaso/Documents/wcmEthRecData")
+        open_file("../wcmEthRecData")
 
 
 
