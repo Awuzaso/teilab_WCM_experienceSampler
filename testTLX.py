@@ -14,12 +14,27 @@ from datetime import datetime
 from os.path import exists
 
     
-#import the newly created GUI file 
+#import the newly created GUI file. GUI
+# file is created interactively in wxformbuilder:
+# https://github.com/wxFormBuilder/wxFormBuilder 
 import experienceSampleNASATLX
 
 
 
 #https://stackoverflow.com/questions/6631299/python-opening-a-folder-in-explorer-nautilus-finder
+
+'''
+/////////////////////////////////////////////////////////////////
+////// Utility Functions            /////////////////////////////
+/////////////////////////////////////////////////////////////////
+'''
+
+
+'''
+Note: Somewhat related, I would like for this applicaiton to be an
+executable so we can avoid having to install libraries for the
+participants.
+'''
 
 def getDateTime():
     # datetime object containing current date and time
@@ -54,6 +69,16 @@ def appendToCSV(filePath,header,data):
         writer.writerows(data)
 
 
+
+'''
+/////////////////////////////////////////////////////////////////
+////// End-of-Day (EoD) Survey (WIP) Window Class     //////////////////////
+Note: Intent behind this window class is to implement an auto-
+generated survey that collects the video snapshots throughtout the day
+for retrospective survey on the participants' own working context
+practices throughout the work day.
+/////////////////////////////////////////////////////////////////
+'''
 
 class eodSurvey(experienceSampleNASATLX.EODvideoSurveyDialog):
     
@@ -128,7 +153,19 @@ class eodSurvey(experienceSampleNASATLX.EODvideoSurveyDialog):
         print("On submit button was pressed.")
         print(self.videoSurveyData)
 
-            
+ 
+'''
+/////////////////////////////////////////////////////////////////
+////// NASA-TLX Modal Window Class      //////////////////////
+Note: Modal window of 7 item NASA-TLX instrument. Functional but
+file path is hardcoded to the original development environment.
+Modal window is launched when the participant clicks "Yes" from
+"surveyRequestDialog(...)". "Yes" is connected to 
+"onClickYesButton(self,event)""
+FYI: https://humansystems.arc.nasa.gov/groups/tlx/
+
+/////////////////////////////////////////////////////////////////
+'''           
 
 class nasaTLXWindow(experienceSampleNASATLX.nasaTLXDialog):
 
@@ -158,6 +195,7 @@ class nasaTLXWindow(experienceSampleNASATLX.nasaTLXDialog):
 
         self.textNoteVal = self.tlx_comment.GetValue()
 
+        # Needs to be changed so that its not hard coded for the path
         filePath = "/Users/awuzaso/Documents/wcmEthRecData/tlxData/"
         file_exists = exists(filePath)
 
@@ -213,13 +251,16 @@ class nasaTLXWindow(experienceSampleNASATLX.nasaTLXDialog):
         obj = e.GetEventObject()
         self.frustrationVal = obj.GetValue()
 
-
-
-
-
-        
-
-
+'''
+/////////////////////////////////////////////////////////////////
+////// surveyRequestDialog (WIP)               //////////////////////
+Note: Dialog window that asks participants if they are able to
+complete NASA-TLX survey when prompted by the application. Class 
+function, "onClickYesButton(self,event)", is currently hardcoded for
+its save directory. This needs to be changed so that this can be defined
+by the user.
+/////////////////////////////////////////////////////////////////
+''' 
 class surveyRequestDialog(experienceSampleNASATLX.surveyRequestWindow): 
      def __init__(self, parent, title):
         experienceSampleNASATLX.surveyRequestWindow.__init__(self,parent)
@@ -302,7 +343,18 @@ class surveyRequestDialog(experienceSampleNASATLX.surveyRequestWindow):
         self.closeFunc(event)
 
 
-
+'''
+/////////////////////////////////////////////////////////////////
+////// testFrame (WIP) Needs a better name.            //////////////////////
+Note: "testFrame" is the first window that is opened upon starting the python
+application. This window acts as a junction for the different modal windows
+associated with the application. Of note, when the participant presses 
+"onSwitchButtonClick", depending if the boolean value recordStatus is True,
+the application will run a threaded process that will record user screen activity 
+for a period of 5 minutes. Currently, the video is saved to a hard coded to
+a specific directory.
+/////////////////////////////////////////////////////////////////
+''' 
 class testFrame(experienceSampleNASATLX.wcmEthnographyApp):
     recordStatus = True
     recordToggle = False
@@ -414,10 +466,20 @@ class testFrame(experienceSampleNASATLX.wcmEthnographyApp):
         print("Video recording complete!")
         self.recordStatus = True
 
+'''
+/////////////////////////////////////////////////////////////////
+////// Setting up main program loop /////////////////////////////
+/////////////////////////////////////////////////////////////////
+'''
 
+
+# Refer to this link to understand basic structure of wxPython GUI
+# programming:
+# https://www.tutorialspoint.com/wxpython/wxpython_hello_world.htm
         
-app = wx.App(False) 
-frame = testFrame(None) 
-frame.Show(True) 
+app = wx.App(False) #Defines an object of Applicaiton class
+frame = testFrame(None) # Creates top level window as object of wx.Frame class.
+						# See "testFrame" class above
+frame.Show(True) 	#Activate frame window by  "show()" method
 #start the applications 
-app.MainLoop() 
+app.MainLoop() #Enter main event loop of Application object
